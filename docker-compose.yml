@@ -1,0 +1,31 @@
+version : '3'
+services:
+  web:  # Specify the conatiner with name web
+    # Specify dockerfile
+    build:
+      # specify the files to be pulled from. In our case the current working directory containing dockerfile
+      context: .
+      # Name of the dockerfile
+      dockerfile: Dockerfile.dev
+    # Ports to map from local system to inside container
+    ports:
+      - "3000:3000"
+    # Volumes for reference to the original source code.
+    volumes:
+      - /app/node_modules
+      - .:/app
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    # Input channel
+    stdin_open: true
+
+  tests:
+    build:
+      # specify the files to be pulled from. In our case the current working directory containing dockerfile
+      context: .
+      # Name of the dockerfile
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    command: ["npm", "run", "test"]
