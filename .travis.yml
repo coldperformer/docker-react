@@ -1,0 +1,14 @@
+# Everytime we use docker, we need super user permission
+sudo: required
+services:
+  # Create a copy of docker on backend
+  - docker
+
+# Contains series of actions before our test starts
+before_install:
+  # Command to build docker image
+  - docker build -t coldperformer/docker-react -f Dockerfile.dev .
+
+# All the commands that needs to be executed to actually run tests
+scripts:
+  - docker run -e CI=true coldperformer/docker-react npm run test
