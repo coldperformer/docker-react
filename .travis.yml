@@ -1,4 +1,5 @@
 # Everytime we use docker, we need super user permission
+language: generic
 sudo: required
 services:
   # Create a copy of docker on backend
@@ -12,3 +13,22 @@ before_install:
 # All the commands that needs to be executed to actually run tests
 scripts:
   - docker run -e CI=true coldperformer/docker-react npm run test
+
+# To deploy settings
+deploy:
+  provider: elasticbeanstalk
+  # Present in URL
+  region: "us-east-2"
+  # Name of the app
+  app: "docker"
+  # Name of the environment
+  env: Docker-env
+  # Present in S3 services on AWS
+  bucket_name: "elasticbeanstalk-us-east-2-005290685595"
+  # Folder inside S3 services that contains the environment
+  bucket_path: "docker"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: 
+    secure: "$AWS_SECRET_KEY"
